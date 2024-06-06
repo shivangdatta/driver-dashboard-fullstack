@@ -4,6 +4,9 @@ import {
 } from 'recharts';
 
 function Basicdetails({ name, id, age, income, driverDetails }) {
+  // State to track hovered bar
+  const [activeIndex, setActiveIndex] = useState(-1);
+
   if (!driverDetails) {
     return <div>Loading...</div>; // Fallback UI
   }
@@ -18,18 +21,13 @@ function Basicdetails({ name, id, age, income, driverDetails }) {
   // Calculate total income pan-country
   const totalIncome = data.reduce((acc, driver) => acc + driver.income, 0);
 
-  // State to track hovered bar
-  const [activeIndex, setActiveIndex] = useState(-1);
-
   // Custom tooltip content
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="custom-tooltip">
-          <div className='bg-white text-black p-3 rounded-lg'>
-            <p>{`Name: ${payload[0].payload.name}`}</p>
-            <p>{`Income: ${payload[0].value}`}</p>
-          </div>
+        <div className="custom-tooltip rounded-lg bg-white text-black p-3">
+          <p>{`Name: ${payload[0].payload.name}`}</p>
+          <p>{`Income: ${payload[0].value}`}</p>
         </div>
       );
     }
@@ -103,7 +101,7 @@ function Basicdetails({ name, id, age, income, driverDetails }) {
                   const { x, y, width, height, payload, index } = props;
                   const isCurrentDriver = payload.name === name;
                   const barColor = isCurrentDriver ? "#8884d8" : (index === activeIndex ? "#DA70D6" : "#FFFFFF");
-                  const strokeColor = isCurrentDriver ? "#000000" : (index === activeIndex ? "#82ca9d" : "#000000");
+                  const strokeColor = isCurrentDriver ? "#000000" : (index === activeIndex ? "#DA70D6" : "#000000");
                   return (
                     <rect x={x} y={y} width={width} height={height} fill={barColor} stroke={strokeColor} />
                   );
